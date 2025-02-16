@@ -3,8 +3,8 @@
       <div class="bg-sky-900 grid rounded-lg shadow-lg py-5 px-7 gap-y-2">
         <p class="text-white text-xl font-bold w-fit place-self-center mb-[1rem]">Olá {{ userName }}, vamos recuperar sua senha</p>
         <div class="grid gap-y-2 mb-[1rem]">
-          <input v-model="password" type="password" placeholder="Nova senha" class="w-full p-2 rounded bg-amber-50 text-black text-lg">
-          <input v-model="passwordConfirmation" type="password" placeholder="Confirme a nova senha" class="w-full p-2 rounded bg-amber-50 text-black text-lg">
+          <input v-model="resetPasswordData.password" type="password" placeholder="Nova senha" class="w-full p-2 rounded bg-amber-50 text-black text-lg">
+          <input v-model="resetPasswordData.passwordConfirmation" type="password" placeholder="Confirme a nova senha" class="w-full p-2 rounded bg-amber-50 text-black text-lg">
         </div>
         <button @click="resetPassword" class="w-[7rem] p-2 bg-blue-500 hover:bg-blue-600 text-white rounded place-self-center cursor-pointer">
           Redefinir
@@ -19,8 +19,10 @@
   export default {
     data() {
       return {
-        password: '',
-        passwordConfirmation: '',
+        resetPasswordData: {
+          password: '',
+          passwordConfirmation: '',
+        },
         userName: ''
       }
     },
@@ -32,26 +34,44 @@
       } catch (error) {
         this.$router.push('/login')
         error = 'Token inválido ou expirado.'
-        this.$emit('showMessage', error, 'error');
+        this.$store.dispatch('showMessage', {
+          text: error,
+          type: 'error',
+        });
       }
     },
     methods: {
       async resetPassword() {
-        if (this.password !== this.passwordConfirmation) {
-          this.$emit('showMessage', 'As senhas não coincidem.', 'error');
+        if (this.resetPasswordData.password !== this.resetPasswordData.passwordConfirmation) {
+          this.$store.dispatch('showMessage', {
+            text: 'As senhas não coincidem.',
+            type: 'error',
+          });
+          return
+        } else if (!this.resetPasswordData.password || !this.resetPasswordData.passwordConfirmation) {
+          this.$store.dispatch('showMessage', {
+            text: 'Por favor, preencha todos os campos.',
+            type: 'error',
+          });
           return
         }
   
         try {
           await LoginApi.updatePassword({
             token: this.$route.query.token,
-            password: this.password,
-            password_confirmation: this.passwordConfirmation
+            password: this.resetPasswordData.password,
+            password_confirmation: this.resetPasswordData.passwordConfirmation
           })
-          this.$emit('showMessage', 'Senha redefinida com sucesso!', 'success');
+          this.$store.dispatch('showMessage', {
+            text: 'Senha redefinida com sucesso!',
+            type: 'success',
+          });
           this.$router.push('/login')
         } catch (error) {
-          this.$emit('showMessage', error.response.data.error, 'error');
+          this.$store.dispatch('showMessage', {
+            text: error.response.data.error,
+            type: 'error',
+          });
         }
       }
     }

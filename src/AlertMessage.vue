@@ -1,28 +1,17 @@
 <template>
-    <div v-if="visible" 
+    <div v-if="alertMessage.visible" 
          :class="['fixed top-4 right-4 p-4 rounded-lg shadow-lg text-white', 
-                  type === 'success' ? 'bg-green-500' : 'bg-red-500']">
-      {{ text }}
+                  alertMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500']">
+      {{ alertMessage.text }}
     </div>
 </template>
   
 <script>
+  import { mapState } from 'vuex';
+
   export default {
-    name: "AlertMessage",
-    props: {
-      text: {
-        type: String,
-        required: true,
-      },
-      type: {
-        type: String,
-        required: true,
-        validator: (value) => ['success', 'error', ''].includes(value),
-      },
-      visible: {
-        type: Boolean,
-        required: true,
-      },
+    computed: {
+      ...mapState(['alertMessage']),
     },
   };
 </script>

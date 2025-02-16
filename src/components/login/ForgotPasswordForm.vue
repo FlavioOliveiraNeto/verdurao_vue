@@ -6,15 +6,13 @@
         <div class="grid gap-y-2 mb-[1rem]">
           <input v-model="forgotPasswordData.email" type="email" placeholder="E-mail" class="w-full p-2 rounded bg-amber-50 text-black text-lg">
         </div>
-        <button @click="submit" :class="type === 'admin' ? 'bg-blue-500 hover:bg-blue-600' : ' bg-green-500 hover:bg-green-600'" 
+        <button @click="submitForgotPassword" :class="type === 'admin' ? 'bg-blue-500 hover:bg-blue-600' : ' bg-green-500 hover:bg-green-600'" 
                 class="w-[7rem] p-2 bg-blue-500 hover:bg-blue-600 text-white rounded place-self-center cursor-pointer">Enviar</button>
       </div>
     </div>
 </template>
   
 <script>
-  import LoginApi from '@/services/login';
-
   export default {
     props: {
       type: {
@@ -33,18 +31,8 @@
       backTo() {
         this.$emit('back');
       },
-      async submit() {
-        if(this.forgotPasswordData.email) {
-          try {
-            await LoginApi.requestPasswordReset(this.forgotPasswordData.email)
-            this.$emit('showMessage', 'Email de recuperação enviado', 'success');
-            this.backTo()
-          } catch (error) {
-            this.$emit('showMessage', error.response.data.error, 'error');
-          }
-        } else {
-          this.$emit('showMessage', 'Por favor, preencha todos os campos.', 'error');
-        }
+      submitForgotPassword() {
+        this.$emit('submitForgotPassword', this.forgotPasswordData);
       }
     }
   };

@@ -1,8 +1,5 @@
 <template>
   <div class="grid grid-rows items-center justify-items-center">
-    <!-- ALERTAS DE MENSAGENS -->
-    <AlertMessage :text="message.text" :type="message.type" :visible="message.visible" />
-
     <!-- TÍTULO -->
     <div class="grid mx-auto mt-[5rem] mb-[1rem]">
       <p class="text-white font-black text-5xl">Verdurão Center</p>
@@ -29,13 +26,13 @@
     </div>
 
     <!-- Formulário de Login -->
-    <LoginForm v-if="showLoginForm" :type="loginType" @back="backTo" @show-register="showRegister" @forgot-password="showForgotPassword" @login="login" @showMessage="showMessage"/>
+    <LoginForm v-if="showLoginForm" :type="loginType" @back="backTo" @show-register="showRegister" @forgot-password="showForgotPassword" @login="login"/>
 
     <!-- Formulário de Cadastro -->
-    <RegisterForm v-if="showRegisterForm" :type="registerType" @back="backTo" @register="register" @showMessage="showMessage"/>
+    <RegisterForm v-if="showRegisterForm" :type="registerType" @back="backTo" @register="register"/>
 
     <!-- Formulário de Esqueci Minha Senha -->
-    <ForgotPasswordForm v-if="showForgotPasswordForm" :type="loginType" @back="backTo" @submit="forgotPassword" @showMessage="showMessage"/>
+    <ForgotPasswordForm v-if="showForgotPasswordForm" :type="loginType" @back="backTo" @submitForgotPassword="submitForgotPassword"/>
   </div>
 </template>
 
@@ -44,12 +41,10 @@
   import RegisterForm from '@/components/login/RegisterForm.vue';
   import ForgotPasswordForm from '@/components/login/ForgotPasswordForm.vue';
   import LoginApi from "@/services/login";
-  import AlertMessage from "@/components/AlertMessage.vue";
 
   export default {
     name: "UserCards",
     components: {
-      AlertMessage,
       LoginForm,
       RegisterForm,
       ForgotPasswordForm
@@ -63,11 +58,6 @@
         showForgotPasswordForm: false,
         loginType: '',
         registerType: '',
-        message: {
-          text: '',
-          type: '',
-          visible: false
-        }
       };
     },
     methods: {
@@ -127,10 +117,16 @@
               this.$router.push('/cliente-dashboard');
             }
           } catch (error) {
-            this.showMessage('Login falhou: ' + error.response.data.error, 'error');
+            this.$store.dispatch('showMessage', {
+              text: 'Login falhou: '  + error.response.data.error,
+              type: 'error',
+            });
           }
         } else {
-          this.showMessage('Por favor, preencha todos os campos.', 'error');
+          this.$store.dispatch('showMessage', {
+            text: 'Por favor, preencha todos os campos.',
+            type: 'error',
+          });
         }
       },
       async register(registerData) {
@@ -142,7 +138,11 @@
             });
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
-            this.showMessage('Cadastro realizado com sucesso para ' + this.registerType + '!', 'success');
+
+            this.$store.dispatch('showMessage', {
+              text: 'Cadastro realizado com sucesso para ' + this.registerType + '!',
+              type: 'success',
+            });
 
             this.registerData = {
               name: '',
@@ -154,23 +154,39 @@
             this.showRegisterForm = false;
             this.showLoginForm = true;
           } catch (error) {
-            this.showMessage('Cadastro falhou: ' + error.response.data.error, 'error');
+            this.$store.dispatch('showMessage', {
+              text: 'Cadastro falhou: ' + error.response.data.error,
+              type: 'error',
+            });
           }
         } else {
-          this.showMessage('Por favor, preencha todos os campos.', 'error');
+          this.$store.dispatch('showMessage', {
+            text: 'Por favor, preencha todos os campos.',
+            type: 'error',
+          });
         }
       },
-      forgotPassword(forgotPasswordData) {
-        this.showMessage('Recuperação de senha para ' + this.loginType, 'success');
-      },
-      showMessage(text, type) {
-        this.message.text = text;
-        this.message.type = type;
-        this.message.visible = true;
-
-        setTimeout(() => {
-          this.message.visible = false;
-        }, 5000);
+      async submitForgotPassword(forgotPasswordData) {
+        if(forgotPasswordData.email) {
+          try {
+            await LoginApi.requestPasswordReset(forgotPasswordData.email)
+            this.$store.dispatch('showMessage', {
+              text: 'Email de recuperação enviado.',
+              type: 'success',
+            });
+            this.backTo()
+          } catch (error) {
+            this.$store.dispatch('showMessage', {
+              text: error.response.error,
+              type: 'error',
+            });
+          }
+        } else {
+          this.$store.dispatch('showMessage', {
+            text: 'Por favor, preencha todos os campos.',
+            type: 'error',
+          });
+        }
       },
     }
   };

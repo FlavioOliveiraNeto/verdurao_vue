@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from '@/router/router';
 
 const api = axios.create({
   baseURL: 'http://localhost:3000',
@@ -31,5 +32,13 @@ export default {
   // Atualizar senha
   updatePassword(data) {
     return api.put('/password_reset', { user: data });
+  },
+
+  // Logout do usuário
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+
+    router.push('/login');
   },
 };
