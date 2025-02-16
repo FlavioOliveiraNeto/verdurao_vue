@@ -17,7 +17,7 @@
       type: {
         type: String,
         required: true,
-        validator: (value) => ['success', 'error'].includes(value),
+        validator: (value) => ['success', 'error', ''].includes(value),
       },
       visible: {
         type: Boolean,

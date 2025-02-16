@@ -11,6 +11,12 @@ const routes = [
     component: () => import("@/components/login/Login.vue"),
   },
   {
+    path: "/reset-password",
+    name: "ResetPassword",
+    component: () => import("@/components/login/ResetPasswordForm.vue"),
+    props: (route) => ({ token: route.query.token }),
+  },
+  {
     path: "/products",
     name: "ListaProdutos",
     component: () => import("@/components/products/ListaProdutos.vue"),
@@ -20,7 +26,7 @@ const routes = [
     path: "/admin-dashboard",
     name: "AdminDashboard",
     component: () => import("@/components/admin/AdminDashboard.vue"),
-    meta: { requiresAuth: true, role: "admin" }
+    meta: { requiresAuth: true, role: "admin" },
   },
   {
     path: "/cliente-dashboard",

@@ -1,81 +1,58 @@
 <template>
   <div class="grid grid-rows items-center justify-items-center">
-      <!-- ALERTAS DE MENSAGENS -->
-      <AlertMessage :text="message.text" :type="message.type" :visible="message.visible" />
+    <!-- ALERTAS DE MENSAGENS -->
+    <AlertMessage :text="message.text" :type="message.type" :visible="message.visible" />
 
-      <!-- TÍTULO -->
-      <div class="grid mx-auto mt-[5rem] mb-[1rem]">
-          <p class="text-white font-black text-5xl">Verdurão Center</p>
-      </div>
+    <!-- TÍTULO -->
+    <div class="grid mx-auto mt-[5rem] mb-[1rem]">
+      <p class="text-white font-black text-5xl">Verdurão Center</p>
+    </div>
 
-      <!-- CARDS DE ESCOLHA -->
-      <div v-if="!showLoginForm && !showRegisterForm" class="h-max w-182 mx-auto my-auto flex items-center gap-x-10 rounded-xl p-6">
-          <div class="mouse-cursor-gradient-tracking flex items-center justify-center w-80 h-100 rounded-lg shadow-lg bg-sky-900 hover:bg-sky-700 
-                      cursor-pointer transition-colors duration-300" 
-              @click="showLogin('admin')"
-              @mousemove="handleMouseMove($event, 'admin')" 
-              @mouseleave="handleMouseLeave('admin')" 
-              :style="adminStyle">
-            <p class="relative z-10 font-bold text-white pointer-events-none">Administrador</p>
-          </div>
-          <div class="mouse-cursor-gradient-tracking flex items-center justify-center w-80 h-100 rounded-lg shadow-lg bg-green-800 hover:bg-green-600 
-                    cursor-pointer transition-colors duration-300"
-              @click="showLogin('customer')"
-              @mousemove="handleMouseMove($event, 'customer')"
-              @mouseleave="handleMouseLeave('customer')"
-              :style="clienteStyle">
-            <p class="relative z-10 font-bold text-white pointer-events-none">Cliente</p>
-          </div>
+    <!-- CARDS DE ESCOLHA -->
+    <div v-if="!showLoginForm && !showRegisterForm && !showForgotPasswordForm" class="h-max w-182 mx-auto my-auto flex items-center gap-x-10 rounded-xl p-6">
+      <div class="mouse-cursor-gradient-tracking flex items-center justify-center w-80 h-100 rounded-lg shadow-lg bg-sky-900 hover:bg-sky-700 
+                  cursor-pointer transition-colors duration-300" 
+          @click="showLogin('admin')"
+          @mousemove="handleMouseMove($event, 'admin')" 
+          @mouseleave="handleMouseLeave('admin')" 
+          :style="adminStyle">
+        <p class="relative z-10 font-bold text-white pointer-events-none">Administrador</p>
       </div>
+      <div class="mouse-cursor-gradient-tracking flex items-center justify-center w-80 h-100 rounded-lg shadow-lg bg-green-800 hover:bg-green-600 
+                cursor-pointer transition-colors duration-300"
+          @click="showLogin('customer')"
+          @mousemove="handleMouseMove($event, 'customer')"
+          @mouseleave="handleMouseLeave('customer')"
+          :style="clienteStyle">
+        <p class="relative z-10 font-bold text-white pointer-events-none">Cliente</p>
+      </div>
+    </div>
 
-      <!-- Formulário de Login -->
-      <div v-else-if="showLoginForm" class="h-max w-182 mx-auto my-auto items-center gap-x-10 rounded-xl p-6">
-        <div :class="loginType === 'admin' ? 'bg-sky-900' : 'bg-green-800'" class="grid rounded-lg shadow-lg py-5 px-7 gap-y-2">
-          <button @click="backTo" class="w-fit mt-2 text-white hover:underline cursor-pointer text-start">Voltar</button>
-          <p class="text-white text-xl font-bold w-fit place-self-center mb-[1rem]">Login de {{ loginType }}</p>
-          <div class="grid gap-y-2 mb-[1rem]">
-            <input v-model="loginData.cpf" v-mask="'###.###.###-##'" type="text" placeholder="CPF" class="w-full p-2 rounded bg-amber-50 text-black text-lg">
-            <input v-model="loginData.password" type="password" placeholder="Digite sua senha" class="w-full p-2 rounded bg-amber-50 text-black text-lg">
-            <div class="flex justify-between">
-              <button @click="showRegister(loginType)" class="w-fit mt-2 text-white hover:underline cursor-pointer text-start">Criar cadastro</button>
-              <button @click="forgotPassword(loginType)" class="w-fit mt-2 text-white hover:underline cursor-pointer text-start">Esqueci minha senha</button>
-            </div>
-          </div>
-          <button @click="login" :class="loginType === 'admin' ? 'bg-blue-500 hover:bg-blue-600' : ' bg-green-500 hover:bg-green-600'" 
-                                class="w-[7rem] p-2 bg-blue-500 hover:bg-blue-600 text-white rounded place-self-center cursor-pointer">Entrar</button>
-        </div>
-      </div>
+    <!-- Formulário de Login -->
+    <LoginForm v-if="showLoginForm" :type="loginType" @back="backTo" @show-register="showRegister" @forgot-password="showForgotPassword" @login="login" @showMessage="showMessage"/>
 
-      <!-- Formulário de Cadastro -->
-      <div v-else-if="showRegisterForm" class="h-max w-182 mx-auto my-auto items-center gap-x-10 rounded-xl p-6">
-        <div :class="registerType === 'admin' ? 'bg-sky-900' : 'bg-green-800'" class="grid rounded-lg shadow-lg py-5 px-7 gap-y-2">
-          <button @click="backTo" class="w-fit mt-2 text-white hover:underline cursor-pointer text-start">Voltar</button>
-          <p class="text-white text-xl font-bold w-fit place-self-center mb-[1rem]">Cadastro de {{ registerType }}</p>
-          <div class="grid gap-y-2 mb-[1rem]">
-            <input v-model="registerData.name" type="text" placeholder="Nome completo" class="w-full p-2 rounded bg-amber-50 text-black text-lg">
-            <input v-model="registerData.email" type="email" placeholder="E-mail" class="w-full p-2 rounded bg-amber-50 text-black text-lg">
-            <input v-model="registerData.cpf" v-mask="'###.###.###-##'" type="text" placeholder="CPF" class="w-full p-2 rounded bg-amber-50 text-black text-lg">
-            <input v-model="registerData.password" type="password" placeholder="Senha" class="w-full p-2 rounded bg-amber-50 text-black text-lg">
-          </div>
-          <button @click="register" :class="loginType === 'admin' ? 'bg-blue-500 hover:bg-blue-600' : ' bg-green-500 hover:bg-green-600'" 
-                  class="w-[7rem] p-2 bg-blue-500 hover:bg-blue-600 text-white rounded place-self-center cursor-pointer">Cadastrar</button>
-        </div>
-      </div>
+    <!-- Formulário de Cadastro -->
+    <RegisterForm v-if="showRegisterForm" :type="registerType" @back="backTo" @register="register" @showMessage="showMessage"/>
+
+    <!-- Formulário de Esqueci Minha Senha -->
+    <ForgotPasswordForm v-if="showForgotPasswordForm" :type="loginType" @back="backTo" @submit="forgotPassword" @showMessage="showMessage"/>
   </div>
 </template>
 
 <script>
+  import LoginForm from '@/components/login/LoginForm.vue';
+  import RegisterForm from '@/components/login/RegisterForm.vue';
+  import ForgotPasswordForm from '@/components/login/ForgotPasswordForm.vue';
   import LoginApi from "@/services/login";
-  import { mask } from 'vue-the-mask';
   import AlertMessage from "@/components/AlertMessage.vue";
 
   export default {
     name: "UserCards",
-    directives: {
-      mask
-    },
     components: {
       AlertMessage,
+      LoginForm,
+      RegisterForm,
+      ForgotPasswordForm
     },
     data() {
       return {
@@ -83,18 +60,9 @@
         clienteStyle: {},
         showLoginForm: false,
         showRegisterForm: false,
+        showForgotPasswordForm: false,
         loginType: '',
         registerType: '',
-        loginData: {
-          cpf: '',
-          password: ''
-        },
-        registerData: {
-          name: '',
-          email: '',
-          cpf: '',
-          password: ''
-        },
         message: {
           text: '',
           type: '',
@@ -129,24 +97,28 @@
         this.loginType = type === 'admin' ? 'admin' : 'customer';
         this.showLoginForm = true;
         this.showRegisterForm = false;
+        this.showForgotPasswordForm = false;
       },
       showRegister(type) {
-        this.registerType = type;
+        this.registerType = type === 'admin' ? 'admin' : 'customer';
         this.showRegisterForm = true;
         this.showLoginForm = false;
+        this.showForgotPasswordForm = false;
+      },
+      showForgotPassword() {
+        this.showForgotPasswordForm = true;
+        this.showLoginForm = false;
+        this.showRegisterForm = false;
       },
       backTo() {
-        if (this.showLoginForm == true) {
-          this.showLoginForm = false;
-        } else if (this.showRegisterForm == true) {
-          this.showLoginForm = true;
-          this.showRegisterForm = false;
-        }
+        this.showLoginForm = false;
+        this.showRegisterForm = false;
+        this.showForgotPasswordForm = false;
       },
-      async login() {
-        if (this.loginData.cpf && this.loginData.password) {
+      async login(loginData) {
+        if (loginData.cpf && loginData.password) {
           try {
-            const response = await LoginApi.login(this.loginData.cpf, this.loginData.password);
+            const response = await LoginApi.login(loginData.cpf, loginData.password);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
             if (response.data.user.role === 'admin') {
@@ -161,11 +133,11 @@
           this.showMessage('Por favor, preencha todos os campos.', 'error');
         }
       },
-      async register() {
-        if (this.registerData.name && this.registerData.email && this.registerData.cpf && this.registerData.password) {
+      async register(registerData) {
+        if (registerData.name && registerData.email && registerData.cpf && registerData.password) {
           try {
             const response = await LoginApi.register({
-              ...this.registerData,
+              ...registerData,
               role: this.registerType.toLowerCase()
             });
             localStorage.setItem('token', response.data.token);
@@ -188,8 +160,8 @@
           this.showMessage('Por favor, preencha todos os campos.', 'error');
         }
       },
-      forgotPassword(type) {
-        this.showMessage('Recuperação de senha para ' + type, 'success');
+      forgotPassword(forgotPasswordData) {
+        this.showMessage('Recuperação de senha para ' + this.loginType, 'success');
       },
       showMessage(text, type) {
         this.message.text = text;
@@ -203,7 +175,7 @@
     }
   };
 </script>
-  
+
 <style scoped>
   .mouse-cursor-gradient-tracking {
     position: relative;
