@@ -3,9 +3,9 @@
     
     <!-- TÍTULO -->
     <div class="flex gap-5 mx-auto mt-[5rem] mb-[1rem]">
-      <button @click="windowBackTo" class="w-fit mt-2 text-black hover:underline cursor-pointer text-start">
+      <router-link to="/home" class="w-fit mt-2 text-black hover:underline cursor-pointer self-center">
         <img src="@/assets/images/casa.png" alt="Home" class="w-6 h-6 hover:p-0.5">
-      </button>
+      </router-link>
       <p class="text-black font-black text-4xl">Escolha uma das opções:</p>
     </div>
 
