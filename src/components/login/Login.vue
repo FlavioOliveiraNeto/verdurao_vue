@@ -108,9 +108,19 @@
         this.showRegisterForm = false;
       },
       backTo() {
-        this.showLoginForm = false;
-        this.showRegisterForm = false;
-        this.showForgotPasswordForm = false;
+        if(this.showLoginForm) {
+          this.showLoginForm = false;
+          this.showRegisterForm = false;
+          this.showForgotPasswordForm = false;
+        } else if(this.showRegisterForm) {
+          this.showLoginForm = true;
+          this.showRegisterForm = false;
+          this.showForgotPasswordForm = false;
+        } else {
+          this.showLoginForm = true;
+          this.showRegisterForm = false;
+          this.showForgotPasswordForm = false;
+        }
       },
       async login(loginData) {
         if (loginData.cpf && loginData.password) {

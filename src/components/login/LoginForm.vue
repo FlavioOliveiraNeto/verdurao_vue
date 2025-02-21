@@ -43,7 +43,7 @@
         this.$emit('back');
       },
       showRegister() {
-        this.$emit('show-register');
+        this.$emit('show-register', this.type);
       },
       forgotPassword() {
         this.$emit('forgot-password');
