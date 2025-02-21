@@ -1,8 +1,12 @@
 <template>
   <div class="grid grid-rows items-center justify-items-center">
+    
     <!-- TÍTULO -->
-    <div class="grid mx-auto mt-[5rem] mb-[1rem]">
-      <p class="text-white font-black text-5xl">Verdurão Center</p>
+    <div class="flex gap-5 mx-auto mt-[5rem] mb-[1rem]">
+      <button @click="windowBackTo" class="w-fit mt-2 text-black hover:underline cursor-pointer text-start">
+        <img src="@/assets/images/casa.png" alt="Home" class="w-6 h-6 hover:p-0.5">
+      </button>
+      <p class="text-black font-black text-4xl">Escolha uma das opções:</p>
     </div>
 
     <!-- CARDS DE ESCOLHA -->
@@ -61,6 +65,9 @@
       };
     },
     methods: {
+      windowBackTo() {
+        history.back();
+      },
       handleMouseMove(event, card) {
         const rect = event.target.getBoundingClientRect();
         const x = event.clientX - rect.left;
