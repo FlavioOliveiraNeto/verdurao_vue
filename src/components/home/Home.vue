@@ -65,27 +65,33 @@
     export default {
         name: "Home",
         components: { 
-            Navigation 
+          Navigation 
         },
         data() {
-            return {
-                categories: [
-                    { name: "Hortifruti", image: hortifruti },
-                    { name: "Padaria", image: padaria },
-                    { name: "Mercearia", image: mercearia },
-                    { name: "Açougue", image: acougue },
-                    { name: "Frios", image: frios },
-                ],
-                trendingProducts: [
-                    { name: "Cold-pressed Juice", price: "$5.99" },
-                    { name: "Citrus Blend Juice", price: "$6.99" },
-                    { name: "Seasonal Fruit Basket", price: "$4.99" },
-                    { name: "Organic Green", price: "$2.99" },
-                    { name: "Fresh Fruits Selection", price: "$3.99" },
-                    { name: "Herbal Seasonings Pack", price: "$4.99" },
-                ]
-            };
-        }
+          return {
+            categories: [
+              { name: "Hortifruti", image: hortifruti },
+              { name: "Padaria", image: padaria },
+              { name: "Mercearia", image: mercearia },
+              { name: "Açougue", image: acougue },
+              { name: "Frios", image: frios },
+            ],
+            trendingProducts: [
+              { name: "Cold-pressed Juice", price: "$5.99" },
+              { name: "Citrus Blend Juice", price: "$6.99" },
+              { name: "Seasonal Fruit Basket", price: "$4.99" },
+              { name: "Organic Green", price: "$2.99" },
+              { name: "Fresh Fruits Selection", price: "$3.99" },
+              { name: "Herbal Seasonings Pack", price: "$4.99" },
+            ]
+          };
+        },
+        computed: {
+          isCustomerLoggedIn() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            return user && user.role === 'customer';
+          }
+        },
     };
 </script>
   

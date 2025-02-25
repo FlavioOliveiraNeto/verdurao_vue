@@ -131,7 +131,7 @@
             if (response.data.user.role === 'admin') {
               this.$router.push('/admin-dashboard');
             } else {
-              this.$router.push('/cliente-dashboard');
+              this.$router.push('/home');
             }
           } catch (error) {
             this.$store.dispatch('showMessage', {
