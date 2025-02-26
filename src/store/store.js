@@ -1,6 +1,10 @@
 import { createStore } from 'vuex';
+import cart from "@/store/cart"
 
 export default createStore({
+  modules: {
+    cart,
+  },
   state: {
     alertMessage: {
       text: '',

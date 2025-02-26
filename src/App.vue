@@ -10,36 +10,36 @@
 </template>
 
 <script>
-  import AlertMessage from './AlertMessage.vue';
+import AlertMessage from './templates/AlertMessage.vue'
 
-  export default {
-    name: "App",
-    components: {
-      AlertMessage,
-    },
-    data() {
-      return {
-        message: {
-          text: '',
-          type: '',
-          visible: false
-        }
-      };
-    },
-    methods: {
-      showMessage(text, type) {
-        this.message.text = text;
-        this.message.type = type;
-        this.message.visible = true;
-
-        setTimeout(() => {
-          this.message.visible = false;
-        }, 5000);
+export default {
+  name: 'App',
+  components: {
+    AlertMessage,
+  },
+  data() {
+    return {
+      message: {
+        text: '',
+        type: '',
+        visible: false,
       },
+    }
+  },
+  methods: {
+    showMessage(text, type) {
+      this.message.text = text
+      this.message.type = type
+      this.message.visible = true
+
+      setTimeout(() => {
+        this.message.visible = false
+      }, 5000)
     },
-  };
+  },
+}
 </script>
 
 <style>
-  @import "tailwindcss";
+@import 'tailwindcss';
 </style>

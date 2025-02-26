@@ -7,7 +7,7 @@
         <h2 class="text-xl font-bold">Carrinho de Compras</h2>
         <button
           @click="closeCart"
-          class="text-gray-700 hover:text-black text-[2rem] absolute top-[-0.5rem] right-[0.5rem] hover:cursor-pointer hover:text-[2.2rem]"
+          class="text-[2rem] absolute top-[-0.5rem] right-[0.5rem] hover:cursor-pointer"
         >
           &times;
         </button>
@@ -16,7 +16,7 @@
       <!-- Lista de Itens no Carrinho -->
       <ul>
         <li v-for="item in cartItems" :key="item.id" class="mb-4 flex justify-between items-center">
-          <span>{{ item.name }} - {{ item.price }}</span>
+          <span>{{ item.name }} - {{ item.price }} ({{ item.quantity }})</span>
           <button @click="removeFromCart(item.id)" class="text-red-500 hover:text-red-700">
             Remover
           </button>
@@ -34,10 +34,10 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['cartItems', 'cartTotal']),
+    ...mapGetters('cart', ['cartItems', 'cartTotal']),
   },
   methods: {
-    ...mapActions(['removeFromCart']),
+    ...mapActions('cart', ['removeFromCart']),
     closeCart() {
       this.$emit('close')
     },
@@ -49,11 +49,19 @@ export default {
 .dropdown {
   border-radius: 15px;
   width: 300px;
-  height: 100px;
+  height: fit-content;
   position: absolute;
   float: left;
   padding: 5px;
   z-index: 10;
+
+  button {
+    color: gray;
+  }
+
+  button:hover {
+    color: black;
+  }
 }
 
 .dropdown:hover {
