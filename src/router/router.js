@@ -24,7 +24,7 @@ const routes = [
   {
     path: "/products",
     name: "ListaProdutos",
-    component: () => import("@/components/products/ListaProdutos.vue"),
+    component: () => import("@/components/client/ListaProdutos.vue"),
     meta: { requiresAuth: true },
   },
   {
@@ -32,12 +32,6 @@ const routes = [
     name: "AdminDashboard",
     component: () => import("@/components/admin/AdminDashboard.vue"),
     meta: { requiresAuth: true, role: "admin" },
-  },
-  {
-    path: "/cliente-dashboard",
-    name: "ClienteDashboard",
-    component: () => import("@/components/client/ClientDashboard.vue"),
-    meta: { requiresAuth: true, role: "customer" },
   },
   {
     path: "/:pathMatch(.*)*",

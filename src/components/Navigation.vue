@@ -2,12 +2,19 @@
   <nav class="flex justify-between items-center py-4 border-b">
     <!-- Logo and Navigation Menu -->
     <div class="flex items-center gap-20 w-fit">
-      <img src="@/assets/images/logo_icon.png" alt="Logo" class="w-12 h-12" />
+      <router-link to="/home"><img src="@/assets/images/logo_icon.png" alt="Logo" class="w-12 h-12" /></router-link>
       <ul class="flex gap-16">
         <li>
-          <a href="#" class="text-gray-700 hover:text-black">Quem somos</a>
+          <a href="#" class="text-gray-700 hover:text-black">Sobre nós</a>
         </li>
-        <li><a href="#" class="text-gray-700 hover:text-black">Contatos</a></li>
+        <li>
+          <router-link to="/products" class="text-gray-700 hover:text-black">
+            Produtos
+          </router-link>
+        </li>
+        <li>
+          <a href="#" class="text-gray-700 hover:text-black">Contatos</a>
+        </li>
       </ul>
     </div>
 

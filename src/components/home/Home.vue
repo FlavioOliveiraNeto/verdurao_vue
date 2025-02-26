@@ -1,19 +1,19 @@
 <template>
-    <div class="container mx-auto p-4 text-black">
+    <div class="grid content-between container mx-auto p-4 text-black">
       <!-- Navigation Header -->
       <Navigation />
       
       <!-- Header Section -->
       <header class="flex gap-3 justify-between items-center py-4 mt-[4rem]">
         <div class="grid gap-3">
-            <h1 class="text-5xl font-bold">Seja Bem-vindo(a) ao Verdurão Center</h1>
+            <h1 class="text-5xl font-bold">Sejam Bem-vindos(as) ao Verdurão Center</h1>
             <p>Venha descobrir a magia dos alimentos fresquinhos!</p>
         </div>
         <img src="@/assets/images/banner.png" alt="Banner" class="relative h-[20rem] w-[70%] rounded-[10rem]">
       </header>
       
       <!-- Categories -->
-      <section class="mt-[6rem]">
+      <section class="mt-[2rem]">
         <h2 class="text-2xl font-bold text-center mb-[2rem]">Categories</h2>
         <div class="grid grid-cols-5 gap-4 mt-4">
           <div v-for="category in categories" :key="category.name" class="bg-gray-200 p-3 rounded text-center font-black cursor-pointer hover:bg-gray-300">
@@ -25,34 +25,14 @@
         </div>
       </section>
       
-      <!-- Special Offers & Trending Products -->
-      <section class="mt-[15rem] flex gap-4">
-        <div class="w-1/4 bg-gray-100 p-4 rounded">
-          <h3 class="font-bold">Special Offers</h3>
-          <div class="bg-white p-4 mt-2 rounded text-center">
-            <p class="text-lg font-bold">Fresh</p>
-            <span class="text-gray-500">by Juicy</span>
-            <p class="text-xl font-bold">20% OFF</p>
-            <button class="bg-black text-white px-4 py-2 mt-2 rounded">Buy Now</button>
-          </div>
-        </div>
-        
-        <div class="w-3/4 bg-gray-100 p-4 rounded">
-          <h3 class="font-bold">Trending Products</h3>
-          <div class="grid grid-cols-3 gap-4 mt-2">
-            <div v-for="product in trendingProducts" :key="product.name" class="bg-white p-4 rounded text-center relative">
-              <p class="mt-2">{{ product.name }}</p>
-              <p class="font-bold">{{ product.price }}</p>
-              <button class="absolute top-2 left-2 bg-black text-white px-2 py-1 rounded text-sm">Add to cart</button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <!-- Footer Section -->
+      <Footer />
     </div>
 </template>
   
 <script>
     import Navigation from "@/components/Navigation.vue"
+    import Footer from "@/components/Footer.vue"
 
     /* Importação das imagens */
     import hortifruti from "@/assets/images/hortifruti.png"
@@ -65,7 +45,8 @@
     export default {
         name: "Home",
         components: { 
-          Navigation 
+          Navigation,
+          Footer 
         },
         data() {
           return {
