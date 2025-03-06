@@ -1,10 +1,10 @@
 <template>
-  <div class="container mx-auto p-4 text-black">
+  <div class="container mx-auto text-black">
     <!-- Navigation Header -->
     <Navigation />
 
     <!-- Header Section -->
-    <header class="flex gap-3 justify-between items-center py-4 mt-[2rem]">
+    <header class="flex gap-3 justify-between items-center mt-[3rem] mb-[2rem]">
       <div class="grid gap-3">
         <h1 class="text-5xl font-bold">Produtos do Verdurão Center</h1>
         <p>Encontre os melhores produtos frescos e naturais!</p>
@@ -12,81 +12,117 @@
     </header>
 
     <!-- Filtros e Ordenação -->
-    <section class="grid mt-[2rem]">
-      <div class="grid xl:grid-cols-3 gap-6">
+    <section class="grid gap-3 mb-[2rem]">
+      <div class="grid xl:grid-cols-3 gap-6 h-fit">
         <!-- Campo de Pesquisa por Nome -->
-        <v-text-field
-          v-model="filters.name"
-          label="Pesquisar por nome..."
-          outlined
-          dense
-          clearable
-          class="w-full md:w-[300px]"
-          @input="debouncedFilter"
-        />
+        <div class="relative">
+          <div class="grid gap-0.5">
+            <label for="" class="px-1">Pesquisa por nome</label>
+            <input
+              v-model="filters.name"
+              type="text"
+              placeholder="Pesquisar por nome..."
+              class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              @input="debouncedFilter"
+            />
+            <button
+              v-if="filters.name"
+              @click="filters.name = ''"
+              class="absolute right-2 top-2 text-gray-500 hover:text-gray-700"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
 
         <!-- Filtro de Categoria -->
-        <v-select
-          v-model="filters.category"
-          :items="categories"
-          label="Categorias"
-          outlined
-          dense
-          clearable
-          class="w-full md:w-[200px]"
-        />
+        <div class="grid gap-0.5">
+          <label for="" class="px-1">Categorias</label>
+          <select
+            v-model="filters.category"
+            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 hover:cursor-pointer"
+          >
+            <option value="">Todas as categorias</option>
+            <option v-for="category in categories" :key="category" :value="category">
+              {{ category }}
+            </option>
+          </select>
+        </div>
 
         <!-- Ordenação -->
-        <v-select
-          v-model="sortBy"
-          :items="sortOptions"
-          item-title="text"
-          item-value="value"
-          label="Ordenar por"
-          outlined
-          dense
-          class="w-full md:w-[200px]"
-        />
+        <div class="grid gap-0.5">
+          <label for="" class="px-1">Ordenar por</label>
+          <select
+            v-model="sortBy"
+            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 hover:cursor-pointer"
+          >
+            <option v-for="option in sortOptions" :key="option.value" :value="option.value">
+              {{ option.text }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <!-- Botão para Limpar Filtros -->
-      <v-btn @click="clearFilters" color="gray" outlined class="w-fit md:w-auto justify-self-end">
+      <button
+        @click="clearFilters"
+        class="h-fit mt-4 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 justify-self-end hover:cursor-pointer"
+      >
         Limpar Filtros
-      </v-btn>
+      </button>
     </section>
 
     <!-- Lista de Produtos -->
-    <section class="mt-[1rem]">
+    <section class="grid gap-6">
       <div class="grid xl:grid-cols-4 gap-6">
-        <v-card
+        <div
           v-for="product in paginatedProducts"
           :key="product.id"
           class="grid bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
         >
-          <v-img
+          <img
             :src="product.image"
             :alt="product.name"
-            class="w-50 h-fit object-cover rounded-t-lg place-self-center"
+            class="w-fit h-[10rem] justify-self-center object-cover rounded-t-lg"
           />
-          <v-card-text class="grid p-4">
-            <h3 class="text-xl font-semibold">{{ product.name }}</h3>
-            <p class="text-gray-600 mt-2">{{ product.description }}</p>
-            <p class="text-green-600 font-bold mt-2">{{ product.price }}</p>
-            <v-btn
-              v-if="isCustomerLoggedIn"
-              @click="addToCart(product)"
-              color="green"
-              class="mt-4 w-full text-white"
-            >
-              Adicionar ao Carrinho
-            </v-btn>
-            <p v-else class="text-red-500">Logue no nosso site para ir às compras!</p>
-          </v-card-text>
-        </v-card>
+          <div class="grid gap-3 p-4">
+            <div class="grid">
+              <h3 class="w-fit text-xl font-semibold">{{ product.name }}</h3>
+              <p class="text-gray-600 mt-2">{{ product.description }}</p>
+            </div>
+            <div class="grid gap-1">
+              <p class="text-green-600 font-bold mt-2">{{ product.price }}</p>
+              <button
+                v-if="isCustomerLoggedIn"
+                @click="addToCart(product)"
+                class="mt-4 w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+              >
+                Adicionar ao Carrinho
+              </button>
+              <p v-else class="text-red-500 mt-4 text-[0.85rem]">
+                Logue no nosso site para ir às compras!
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Paginação -->
-      <v-pagination v-model="currentPage" :length="totalPages" :total-visible="7" class="mt-8" />
+      <div class="mt-8 flex justify-center gap-2">
+        <button
+          v-for="page in totalPages"
+          :key="page"
+          @click="currentPage = page"
+          :class="[
+            'px-4 py-2 border rounded-lg',
+            currentPage === page
+              ? 'bg-green-500 text-white border-green-500'
+              : 'border-gray-300 hover:bg-gray-100',
+          ]"
+        >
+          {{ page }}
+        </button>
+      </div>
     </section>
 
     <!-- Footer Section -->
@@ -212,5 +248,6 @@ export default {
 <style scoped>
 .container {
   max-width: 85vw;
+  display: grid;
 }
 </style>

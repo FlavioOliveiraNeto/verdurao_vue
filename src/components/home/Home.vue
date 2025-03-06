@@ -87,5 +87,6 @@ export default {
 <style>
 .container {
   max-width: 85vw;
+  display: grid;
 }
 </style>

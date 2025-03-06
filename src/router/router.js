@@ -25,7 +25,6 @@ const routes = [
     path: "/products",
     name: "ListaProdutos",
     component: () => import("@/components/client/ListaProdutos.vue"),
-    meta: { requiresAuth: true },
   },
   {
     path: "/admin-dashboard",
