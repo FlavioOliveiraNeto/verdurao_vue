@@ -41,7 +41,7 @@
         <router-link
           v-if="isCustomerLoggedIn"
           to="#"
-          class="text-gray-700 hover:text-black"
+          class="text-gray-700 hover:text-black grid justify-items-center gap-0.5"
           @click="toggleCart"
         >
           <img
@@ -49,6 +49,8 @@
             alt="Carrinho"
             class="w-6 h-6 cursor-pointer hover:p-[0.05rem]"
           />
+
+          <span class="bg-red-500 px-[7px] rounded-4xl">{{ cartItemCount }}</span>
         </router-link>
         <img
           v-else
@@ -79,6 +81,7 @@
 <script>
 import Cart from '@/components/client/Cart.vue'
 import UserDropdown from '@/components/home/UserDropdown.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -92,6 +95,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('cart', ['cartItemCount']),
     isCustomerLoggedIn() {
       const user = JSON.parse(localStorage.getItem('user'))
       this.user = user
