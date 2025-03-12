@@ -23,8 +23,18 @@ const routes = [
   },
   {
     path: "/products",
-    name: "ListaProdutos",
-    component: () => import("@/components/client/ListaProdutos.vue"),
+    name: "ProductsList",
+    component: () => import("@/components/client/ProductsList.vue"),
+  },
+  {
+    path: "/custormer-info",
+    name: "CustomerInfoForm",
+    component: () => import("@/components/client/CustomerInfoForm.vue"),
+  },
+  {
+    path: "/payment-info",
+    name: "PaymentMethod",
+    component: () => import("@/components/client/PaymentMethod.vue"),
   },
   {
     path: "/admin-dashboard",

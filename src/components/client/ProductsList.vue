@@ -73,7 +73,7 @@
     </section>
 
     <!-- Lista de Produtos -->
-    <section class="grid gap-6">
+    <section class="grid gap-6 mb-[1rem]">
       <div class="grid xl:grid-cols-4 gap-6">
         <div
           v-for="product in paginatedProducts"
@@ -95,7 +95,7 @@
               <button
                 v-if="isCustomerLoggedIn"
                 @click="addToCart(product)"
-                class="mt-4 w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                class="mt-4 w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 hover:cursor-pointer"
               >
                 Adicionar ao Carrinho
               </button>
@@ -144,7 +144,7 @@ import arroz_integral from '@/assets/images/arroz-integral.png'
 /* Fim das importações */
 
 export default {
-  name: 'ListaProdutos',
+  name: 'ProductsList',
   components: {
     Navigation,
     Footer,

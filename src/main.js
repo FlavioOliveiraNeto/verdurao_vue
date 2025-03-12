@@ -8,6 +8,7 @@ import store from '@/store/store.js';
 const app = createApp(App);
 
 app.use(router);
-app.use(store);
 
-app.mount('#app');
+store.dispatch('auth/initializeStore').then(() => {
+    app.use(store).mount('#app');
+});

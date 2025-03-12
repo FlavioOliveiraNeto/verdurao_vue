@@ -1,47 +1,77 @@
 <template>
-    <div v-if="alertMessage.visible" 
-         :class="['fixed top-4 right-4 p-4 rounded-lg shadow-lg text-white', 
-                  alertMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500']">
-      {{ alertMessage.text }}
+  <transition name="alert">
+    <div
+      v-if="alertMessage"
+      :class="[
+        'fixed z-9999 top-4 right-4 p-4 rounded-lg shadow-lg text-white flex items-center justify-between',
+        alertMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500',
+      ]"
+      role="alert"
+    >
+      <span>{{ alertMessage.text }}</span>
+      <button
+        @click="clearMessage"
+        class="ml-4 p-1 rounded-full hover:bg-black/10 focus:outline-none"
+        aria-label="Fechar"
+      >
+        &times;
+      </button>
     </div>
+  </transition>
 </template>
-  
-<script>
-  import { mapState } from 'vuex';
 
-  export default {
-    computed: {
-      ...mapState(['alertMessage']),
+<script>
+import { mapState, mapActions } from 'vuex'
+
+export default {
+  computed: {
+    ...mapState('alertMessage', ['message']),
+    alertMessage() {
+      return this.message
     },
-  };
+  },
+  methods: {
+    ...mapActions('alertMessage', ['clearMessage']),
+  },
+  watch: {
+    alertMessage(newMessage) {
+      if (newMessage) {
+        // Fecha automaticamente após 5 segundos
+        setTimeout(() => {
+          this.clearMessage()
+        }, 5000)
+      }
+    },
+  },
+}
 </script>
-  
+
 <style scoped>
-  /* Animação para aparecer e desaparecer */
-  @keyframes slideIn {
-    from {
-      transform: translateX(100%);
-    }
-    to {
-      transform: translateX(0);
-    }
+/* Animação de entrada */
+.alert-enter-active {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Animação de saída */
+.alert-leave-active {
+  animation: fadeOut 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
   }
-  
-  @keyframes fadeOut {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
+  to {
+    transform: translateX(0);
   }
-  
-  .fixed {
-    animation: slideIn 0.3s ease-out;
-    z-index: 1000; /* Garante que a mensagem fique acima de tudo */
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
   }
-  
-  .fixed.hide {
-    animation: fadeOut 0.5s ease-out;
+  to {
+    opacity: 0;
   }
+}
 </style>

@@ -1,15 +1,17 @@
-import axios from 'axios';
-import router from '@/router/router';
-
-const api = axios.create({
-  baseURL: 'http://localhost:3000',
-  withCredentials: true,
-});
+import api from '@/services/axiosConfig'; // Importa a instância configurada do Axios
 
 export default {
   // Login
-  login(cpf, password) {
-    return api.post('/auth/login', { cpf, password });
+  async login(cpf, password) {
+    try {
+      const response = await api.post('/auth/login', { cpf, password });
+      // Salva o token e o usuário no localStorage após o login
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      return response;
+    } catch (error) {
+      throw error;
+    }
   },
 
   // Cadastro

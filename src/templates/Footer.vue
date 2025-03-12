@@ -1,5 +1,5 @@
 <template>
-  <footer class="border-t mt-[2rem]">
+  <footer class="border-t mb-[0.5rem] self-end">
     <div class="flex gap-4 items-center justify-between pt-4">
       <div class="flex gap-4">
         <a href="#" class=""

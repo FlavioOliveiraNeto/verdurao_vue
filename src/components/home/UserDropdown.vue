@@ -1,13 +1,15 @@
 <template>
   <div class="relative">
     <!-- Ícone do Usuário Logado -->
-    <div class="grid items-center justify-items-center cursor-pointer" @click="toggleMenu">
+    <div class="grid items-center justify-items-center" @click="toggleMenu">
       <img
         src="@/assets/images/user_icon_logged.png"
         alt="Login"
         class="w-6 h-6 hover:p-[0.05rem]"
       />
-      <label class="font-[0.8rem] mt-[.2rem]">{{ getFirstName(user.name) }}</label>
+      <label class="text-[1rem] mt-[.2rem] hover:font-medium hover:cursor-pointer">{{
+        getFirstName(user.name)
+      }}</label>
     </div>
 
     <!-- Dropdown Menu -->
@@ -65,12 +67,8 @@ export default {
     },
     logout() {
       LoginApi.logout()
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
-      window.location.reload()
+      this.$router.push('/home')
     },
   },
 }
 </script>
-
-<style scoped></style>

@@ -64,7 +64,7 @@
       </div>
 
       <!-- Ícone do Usuário Logado com Dropdown -->
-      <UserDropdown v-if="isCustomerLoggedIn" :user="user" />
+      <UserDropdown v-if="isCustomerLoggedIn" :user="user" class="cursor-pointer" />
 
       <!-- Ícone do Usuário Não Logado -->
       <router-link v-else to="/login" class="text-gray-700 hover:text-black">
