@@ -7,15 +7,15 @@
     <div class="customer-info-form">
       <button
         @click="backTo"
-        class="w-fit mb-[2rem] text-black hover:underline cursor-pointer text-start"
+        class="w-fit mb-[1rem] text-white bg-blue-500 hover:bg-blue-700 hover:border-blue-700 hover:text-white cursor-pointer text-start border-[1px] border-transparent px-1.5 py-0.5 rounded-md"
       >
         ⭠ Voltar
       </button>
 
       <form @submit.prevent="submitForm" class="grid gap-6">
-        <div class="grid gap-8">
+        <div class="grid gap-6">
           <!-- Seção de Informações do Cliente -->
-          <div class="grid gap-3">
+          <div class="grid gap-2">
             <h2 class="text-2xl font-bold">Informações do Cliente</h2>
             <div class="flex justify-between gap-3.5">
               <!-- CPF -->
@@ -44,8 +44,7 @@
                   required
                 />
               </div>
-            </div>
-            <div class="flex justify-between gap-3.5">
+
               <!-- Telefone -->
               <div class="grid gap-0.5 flex-auto">
                 <label for="cpf" class="px-1">Telefone:</label>
@@ -76,7 +75,7 @@
           </div>
 
           <!-- Seção de Endereço de Entrega -->
-          <div class="grid gap-3">
+          <div class="grid gap-2">
             <h2 class="text-2xl font-bold">Endereço de entrega</h2>
             <div class="flex justify-between gap-3.5">
               <!-- CEP -->
@@ -119,9 +118,7 @@
                   required
                 />
               </div>
-            </div>
 
-            <div class="flex justify-between gap-3.5">
               <!-- Complemento -->
               <div class="grid gap-0.5 flex-auto">
                 <label for="complement" class="px-1">Complemento:</label>
@@ -178,7 +175,7 @@
           </div>
 
           <!-- Seção de Resumo da Compra -->
-          <div class="grid gap-3">
+          <div class="grid gap-2">
             <h2 class="text-2xl font-bold">Resumo da Compra</h2>
             <div v-if="cartItems.length > 0" class="grid gap-4">
               <div
@@ -350,8 +347,8 @@ export default {
 
 .customer-info-form {
   width: -webkit-fill-available;
-  margin: auto;
-  padding: 2rem;
+  margin: 1rem auto;
+  padding: 1rem 2rem;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
   background-color: white;
