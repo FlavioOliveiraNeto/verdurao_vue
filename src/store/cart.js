@@ -15,14 +15,20 @@ export default {
       } else {
         state.cartItems.push({ ...product, quantity: 1 });
       }
+      // Salva o carrinho no localStorage (não perder os produtos em caso de reload)
+      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
     },
     // Remove um produto do carrinho
     REMOVE_FROM_CART(state, productId) {
       state.cartItems = state.cartItems.filter((item) => item.id !== productId);
+      // Atualiza o localStorage após remover o item
+      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
     },
     // Limpa o carrinho
     CLEAR_CART(state) {
       state.cartItems = [];
+      // Remove o carrinho do localStorage
+      localStorage.removeItem('cartItems');
     },
     // Define as informações do cliente (endereço de entrega, etc.)
     SET_CUSTOMER_INFO(state, customerInfo) {
@@ -35,6 +41,13 @@ export default {
     // Adiciona um pedido à lista de pedidos
     ADD_ORDER(state, order) {
       state.orders.push(order);
+    },
+    // Restaura o carrinho do localStorage
+    RESTORE_CART(state) {
+      const cartItems = localStorage.getItem('cartItems');
+      if (cartItems) {
+        state.cartItems = JSON.parse(cartItems);
+      }
     },
   },
   actions: {
@@ -121,6 +134,10 @@ export default {
           resolve(true);
         }, 1000);
       });
+    },
+    // Restaura o carrinho do localStorage
+    restoreCart({ commit }) {
+      commit('RESTORE_CART');
     },
   },
   getters: {
