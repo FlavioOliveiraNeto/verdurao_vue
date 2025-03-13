@@ -39,7 +39,7 @@ export default {
         // Fecha automaticamente após 5 segundos
         setTimeout(() => {
           this.clearMessage()
-        }, 5000)
+        }, 3000)
       }
     },
   },

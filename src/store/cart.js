@@ -18,6 +18,13 @@ export default {
       // Salva o carrinho no localStorage (não perder os produtos em caso de reload)
       localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
     },
+    // Atualiza a quantidade de um item no carrinho
+    UPDATE_CART_ITEM_QUANTITY(state, { id, quantity }) {
+      const item = state.cartItems.find(item => item.id === id);
+      if (item) {
+        item.quantity = quantity;
+      }
+    },
     // Remove um produto do carrinho
     REMOVE_FROM_CART(state, productId) {
       state.cartItems = state.cartItems.filter((item) => item.id !== productId);
@@ -54,6 +61,10 @@ export default {
     // Adiciona um produto ao carrinho
     addToCart({ commit }, product) {
       commit('ADD_TO_CART', product);
+    },
+    // Atualiza a quantidade de um item no carrinho
+    updateCartItemQuantity({ commit }, payload) {
+      commit('UPDATE_CART_ITEM_QUANTITY', payload);
     },
     // Remove um produto do carrinho
     removeFromCart({ commit }, productId) {

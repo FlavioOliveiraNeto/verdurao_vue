@@ -14,12 +14,16 @@
       </div>
 
       <!-- Lista de Itens no Carrinho -->
-      <ul>
+      <ul class="grid gap-1">
         <li v-for="item in cartItems" :key="item.id" class="mb-4 flex justify-between items-center">
-          <span class="text-sm">{{ item.name }} - {{ item.price }} ({{ item.quantity }})</span>
-          <button @click="removeFromCart(item.id)" class="text-red-500 hover:text-red-700">
-            Remover
-          </button>
+          <span class="text-sm">{{ item.name }} - {{ item.price }}</span>
+          <input
+            type="number"
+            v-model.number="item.quantity"
+            min="0"
+            class="w-12 text-center border border-gray-300 rounded-lg"
+            @change="updateQuantity(item)"
+          />
         </li>
       </ul>
 
@@ -45,9 +49,16 @@ export default {
     ...mapGetters('cart', ['cartItems', 'cartTotal']),
   },
   methods: {
-    ...mapActions('cart', ['removeFromCart']),
+    ...mapActions('cart', ['removeFromCart', 'updateCartItemQuantity']),
     closeCart() {
       this.$emit('close')
+    },
+    updateQuantity(item) {
+      if (item.quantity <= 0) {
+        this.removeFromCart(item.id)
+      } else {
+        this.updateCartItemQuantity({ id: item.id, quantity: item.quantity })
+      }
     },
   },
 }

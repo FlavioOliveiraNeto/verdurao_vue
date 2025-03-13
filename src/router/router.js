@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import store from '@/store/store.js'
 
 const routes = [
   {
@@ -54,9 +55,8 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
+router.beforeEach(async (to, from, next) => {
+  await store.dispatch('auth/initializeStore');
 
   if (to.meta.requiresAuth) {
     if (!token) {

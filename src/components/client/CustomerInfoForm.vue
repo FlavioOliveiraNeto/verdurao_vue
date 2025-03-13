@@ -5,14 +5,14 @@
 
     <!-- Form Section -->
     <div class="customer-info-form">
-      <button
+      <!--<button
         @click="backTo"
         class="w-fit mb-[1rem] text-white bg-blue-500 hover:bg-blue-700 hover:border-blue-700 hover:text-white cursor-pointer text-start border-[1px] border-transparent px-1.5 py-0.5 rounded-md"
       >
         ⭠ Voltar
-      </button>
+      </button>-->
 
-      <form @submit.prevent="submitForm" class="grid gap-6">
+      <form @submit.prevent="submitForm" class="grid gap-1">
         <div class="grid gap-6">
           <!-- Seção de Informações do Cliente -->
           <div class="grid gap-2">
@@ -220,7 +220,7 @@
         <!-- Botão de Envio -->
         <button
           type="submit"
-          class="w-fit px-10 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded-lg hover:cursor-pointer justify-self-center"
+          class="w-fit px-8 py-1 bg-blue-500 hover:bg-blue-700 text-white rounded-lg hover:cursor-pointer justify-self-center"
         >
           Avançar
         </button>
@@ -262,6 +262,15 @@ export default {
       },
     }
   },
+  created() {
+    this.loadFormData()
+
+    if (this.user) {
+      this.form.cpf = this.user.cpf || ''
+      this.form.name = this.user.name || ''
+      this.form.email = this.user.email || ''
+    }
+  },
   computed: {
     // Obtém as informações do usuário logado do Vuex
     ...mapState('auth', ['user']),
@@ -278,17 +287,36 @@ export default {
       )
     },
   },
-  created() {
-    if (this.user) {
-      this.form.cpf = this.user.cpf || ''
-      this.form.name = this.user.name || ''
-      this.form.email = this.user.email || ''
-    }
+  watch: {
+    user(newUser) {
+      if (newUser) {
+        this.form.cpf = newUser.cpf || ''
+        this.form.name = newUser.name || ''
+        this.form.email = newUser.email || ''
+      }
+    },
+    form: {
+      handler(newValue) {
+        this.saveFormData()
+      },
+      deep: true,
+    },
   },
   methods: {
     ...mapActions('cart', ['saveCustomerInfo']),
     backTo() {
       history.back()
+    },
+    // Carrega os dados preenchidos do formulário
+    loadFormData() {
+      const savedFormData = localStorage.getItem('customerFormData')
+      if (savedFormData) {
+        this.form = JSON.parse(savedFormData)
+      }
+    },
+    // Salva os dados preenchidos do formulário
+    saveFormData() {
+      localStorage.setItem('customerFormData', JSON.stringify(this.form))
     },
     // Busca o endereço a partir do CEP usando a API ViaCEP
     async fetchAddress() {
@@ -324,6 +352,7 @@ export default {
         const response = await OrderApi.createOrder(orderData)
 
         if (response.data.success) {
+          localStorage.removeItem('customerFormData')
           this.$router.push({
             name: 'PaymentMethod',
             params: { orderId: response.data.order.id },
@@ -348,7 +377,7 @@ export default {
 .customer-info-form {
   width: -webkit-fill-available;
   margin: 1rem auto;
-  padding: 1rem 2rem;
+  padding: 0.7rem 2rem;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
   background-color: white;
