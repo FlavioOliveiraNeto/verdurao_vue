@@ -14,6 +14,7 @@
 
       <form @submit.prevent="submitForm" class="grid gap-6">
         <div class="grid gap-8">
+          <!-- Seção de Informações do Cliente -->
           <div class="grid gap-3">
             <h2 class="text-2xl font-bold">Informações do Cliente</h2>
             <div class="flex justify-between gap-3.5">
@@ -73,6 +74,8 @@
               </div>
             </div>
           </div>
+
+          <!-- Seção de Endereço de Entrega -->
           <div class="grid gap-3">
             <h2 class="text-2xl font-bold">Endereço de entrega</h2>
             <div class="flex justify-between gap-3.5">
@@ -173,6 +176,48 @@
               </div>
             </div>
           </div>
+
+          <!-- Seção de Resumo da Compra -->
+          <div class="grid gap-3">
+            <h2 class="text-2xl font-bold">Resumo da Compra</h2>
+            <div v-if="cartItems.length > 0" class="grid gap-4">
+              <div
+                v-for="item in cartItems"
+                :key="item.id"
+                class="flex justify-between items-center"
+              >
+                <div class="flex items-center gap-4">
+                  <img
+                    :src="item.image"
+                    :alt="item.name"
+                    class="w-16 h-16 object-cover rounded-lg"
+                  />
+                  <div>
+                    <p class="font-medium">{{ item.name }}</p>
+                    <p class="text-sm text-gray-600">Quantidade: {{ item.quantity }}</p>
+                  </div>
+                </div>
+                <p class="font-medium">
+                  {{
+                    (
+                      parseFloat(
+                        item.price.replace('R$', '').replace('.', '').replace(',', '.').trim(),
+                      ) * item.quantity
+                    ).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                  }}
+                </p>
+              </div>
+              <div class="flex justify-between border-t pt-4">
+                <p class="font-bold">Total:</p>
+                <p class="font-bold">
+                  {{ totalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+                </p>
+              </div>
+            </div>
+            <div v-else>
+              <p class="text-gray-600">Nenhum item no carrinho.</p>
+            </div>
+          </div>
         </div>
 
         <!-- Botão de Envio -->
@@ -223,21 +268,20 @@ export default {
   computed: {
     // Obtém as informações do usuário logado do Vuex
     ...mapState('auth', ['user']),
-  },
-  watch: {
-    // Observa mudanças no usuário e preenche os campos automaticamente
-    user: {
-      immediate: true, // Executa a função assim que o componente é montado
-      handler(newUser) {
-        if (newUser) {
-          this.form.cpf = newUser.cpf || ''
-          this.form.name = newUser.name || ''
-          this.form.email = newUser.email || ''
-        }
-      },
+    // Obtém os itens do carrinho do Vuex
+    ...mapState('cart', ['cartItems']),
+    // Calcula o preço total da compra
+    totalPrice() {
+      return this.cartItems.reduce(
+        (total, item) =>
+          total +
+          parseFloat(item.price.replace('R$', '').replace('.', '').replace(',', '.').trim()) *
+            item.quantity,
+        0,
+      )
     },
   },
-  mounted() {
+  created() {
     if (this.user) {
       this.form.cpf = this.user.cpf || ''
       this.form.name = this.user.name || ''

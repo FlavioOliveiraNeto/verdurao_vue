@@ -35,12 +35,15 @@ export default {
       },
       // Inicializa o Vuex restaurando o usuário e o token do localStorage
       initializeStore({ commit }) {
-        const user = JSON.parse(localStorage.getItem('user'));
-        const token = localStorage.getItem('token');
-        if (user && token) {
-          commit('SET_USER', user);
-          commit('SET_TOKEN', token);
-        }
+        return new Promise((resolve) => {
+          const user = JSON.parse(localStorage.getItem('user'));
+          const token = localStorage.getItem('token');
+          if (user && token) {
+            commit('SET_USER', user);
+            commit('SET_TOKEN', token);
+          }
+          resolve();
+        });
       },
     },
     getters: {
